@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>太阳系</title>
+</head>
+<body>
+	<canvas id="solar" height="300px" width="300px"></canvas>
+	<script type="text/javascript">
+	function draw(){
+	    var canvas = document.getElementById('solar');
+	    if (!canvas.getContext) return;
+	    var ctx = canvas.getContext("2d");
+	    ctx.beginPath();
+	    ctx.moveTo(50, 50);
+	    ctx.lineTo(200, 50);
+	    ctx.lineTo(200, 200);
+	      //ctx.closePath(); //虽然我们只绘制了两条线段，但是closePath会closePath，仍然是一个3角形
+	    ctx.stroke(); //描边。stroke不会自动closePath()
+	}
+	draw();
+	</script>
+</body>
+</html>

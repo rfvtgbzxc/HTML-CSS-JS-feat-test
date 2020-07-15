@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>sync测试</title>
+	<script type="text/javascript">
+		/*
+		function sayhello(text){
+			return new Promise((resolve)=>setTimeout(()=>resolve(text),1000))
+			.then((text)=>{console.log(text);return new Promise((resolve)=>setTimeout(()=>resolve(text),1000));})
+			.then((text)=>console.log(text+" again"));
+		}
+		async function hello(...texts){
+			for(let text of texts){
+				await sayhello(text);
+			}
+		}
+		hello("A","B","D");*/
+		var one = null;
+		var count = 0;
+		var resolvePromise = null;
+		function meetAnyone(){
+			return new Promise(
+				(resolve)=>{
+					//将resove移交到外部供控制器使用
+					resolvePromise = {resolve:()=>resolve(),timer_id:setTimeout(()=>resolve(),1000)};
+					//let timer_id = setTimeout(()=>resolve(),1000);
+					//尝试在0.5秒后销毁计时器,看会发生什么
+					//setTimeout(()=>clearTimeout(timer_id),500);
+				})
+			.then(
+				()=>{
+					one="老刘";
+					return true;
+				})
+			.catch(()=>{
+				console.log("未成功！")
+			});
+		}
+		function greetHim(){
+			return new Promise(
+				(resolve)=>{
+					console.log("hello!(我)")
+					setTimeout(()=>resolve(),1000);
+				})
+			.then(
+				()=>{
+					console.log(`hello!(${one})`);
+					return true;
+				});
+		}
+		async function stepByStep(){
+			//第一步
+			if(!await meetAnyone()){return false};
+			console.log(`碰见了${one}！`);
+			//第二步
+			if(!await greetHim()){return false};
+			console.log("成功打招呼！");
+			return true;
+		}
+		stepByStep();
+		setTimeout(()=>{
+			//clearTimeout(resolvePromise.timer_id);
+			resolvePromise.resolve();
+		},1000);
+		console.log("interrupt");
+	</script>
+</head>
+<body>
+
+</body>
+</html>

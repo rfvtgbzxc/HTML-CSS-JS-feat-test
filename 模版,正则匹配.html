@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<div id="nav"></div>  
+<script type="text/javascript">
+	var formateStr = function(param, data) {
+      return param.replace(/\{#(\w+)#\}/g, function(match, key, aa, dd) {
+        console.log(match, key, aa, dd);
+        return typeof data[key] === undefined ? '' : data[key];
+      });
+    };
+    // 模板方法
+    var Nav = function(data) {
+      var _this = this;
+      _this.item = '<li><a href="{#hrefUrl#}" title="{#title#}" {#sign#}>{#content#}</a></li>';
+      _this.html = '<ul>';
+      for(var i = 0, l = data.length; i < l; i++) {
+        _this.html += formateStr(_this.item, data[i]);
+      }
+      _this.html += '</ul>';
+      return _this.html;
+    };
+    // 扩展方法
+    var infoNav = function(data) {
+      var _this = this;
+      _this.info = '<i>{#num#}</i>';
+      for (var i = data.length - 1; i >= 0; i--) {
+        data[i].content += formateStr(_this.info, data[i]);
+      };
+      return Nav.call(this, data);
+    };
+
+    /*var objNav = document.getElementById('nav');
+    objNav.innerHTML = infoNav([
+      {
+        hrefUrl : 'http://www.baidu.com',
+        title: '这里是百度一下',
+        content : '百度一下',
+        num: '10',
+        sign: 'sign="1"'
+      },
+      {
+        hrefUrl: 'http://www.zhihu.com',
+        title: '这里是知乎一下',
+        content: '知乎一下',
+        num: '10',
+        sign: 'sign="2"'
+      }
+    ])*/
+    //match:匹配内容 key:子串内容 index:匹配位置 dd:字符串原文
+    function render(template,data){
+      //先解析for循环
+      var result=flat_for_structure(template,data);
+      return result.replace(/\{\{(.+?)\}\}/g, function(match, key) {
+        //检查是否有多级引用
+        return load_value(key,data);
+      });
+    }
+    function flat_for_structure(template,data){
+      return template.replace(/{%\s*(for.*?)\s*?%}(.*){%\s*end for\s*%}/g,function(match, forhead,forbody) {
+        var fordata={};
+        forhead.replace(/for\s*(.*?)\s*in\s*(.*)/,function(match,item,list){
+          fordata.item_name=item;
+          fordata.list_name=list;
+          fordata.list_length=load_value(list,data).length;
+        });
+        var result="";
+        for(let i=0;i<fordata.list_length;i++){
+          result+=forbody.replace(new RegExp("(?<=\\{\\{.*)("+fordata.item_name+")(?=.*?\\}\\})","g"),function(match) {
+            return fordata.list_name+"."+i;
+          });
+        }
+        return result;
+      });
+    }
+    function load_value(key,data){
+      //检查是否有多级引用
+      var key_list=key.split(/\./);
+      var value=data;
+      try{
+        for(let base_key of key_list){
+          value=value[base_key];
+        }
+      }
+      catch(e){
+        value="";
+      }
+      return value;
+    }
+    var objNav = document.getElementById('nav');
+    objNav.innerHTML=render(`<div help="{{intro.help}}">{% for name in intro.namelist%}<div>名称:{{name}}</div>{% end for%}</div>`,{intro:{help:"这是简介",tip:"这是提示",namelist:["柳翎","虚晨冷","古道"]}});
+    //console.log(" for  cost in costlist ".replace(/^\s+|\s+$/g,"").split(/\s+/));
+    /*var data={costlist:["x","y","z"]};
+    var ax="{% for cost in costlist %}something{{cost}}{% end for %}".replace(/{%\s*(for.*?)\s*?%}(.*){%\s*end for\s*%}/g,function(match, forhead,forbody) {
+        console.log(match,"=>",forhead,",",forbody);
+        var fordata={};
+        forhead.replace(/for\s*(.*?)\s*in\s*(.*)/,function(match,item,list){
+          console.log(match,"=>",item,",",list);
+          fordata.item_name=item;
+          fordata.item_list=load_value(list,data);
+        });
+        result="";
+        for(let i=0;i<fordata.item_list.length;i++){
+          result+=forbody.replace(new RegExp("(?<=\\{\\{.*)("+fordata.item_name+")(?=.*?\\}\\})","g"),function(match) {
+            console.log(match);
+            return fordata.item_name+"."+i;
+          });
+        }
+        return result;
+      })
+    console.log(ax);*/
+</script>
+</body>
+</html>

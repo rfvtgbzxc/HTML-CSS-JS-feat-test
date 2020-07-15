@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>定时执行内容</title>
+</head>
+<body>
+    <script>
+        function Queue() {
+            this.task_list = [];
+        }
+        Queue.prototype.task = function (time,task_func) {
+            this.task_list.push([time,task_func]);
+            return this;
+        }
+        Queue.prototype.start = async function(){
+          while(this.task_list.length){
+            let [time,task_func] = this.task_list.shift();
+            await new Promise((resolve)=>{
+              setTimeout(
+                ()=>{
+                  task_func();
+                  resolve();
+                },time);
+              }
+            );
+          }
+        }
+        new Queue()
+          .task(1000, () => {
+            console.log(1)
+          })
+          .task(3000, () => {
+            console.log(2)
+          })
+          .task(1000, () => {
+            console.log(3)
+          })
+          .start();
+        function Chain() {
+            this.promise = null;
+        }
+        function chain() {
+            return new Chain();
+        }
+
+
+    </script>
+</body>
+</html>

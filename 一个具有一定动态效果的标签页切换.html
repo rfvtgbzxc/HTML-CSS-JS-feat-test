@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>简单的动态菜单</title>
+	<script type="text/javascript" src="http://cdn.newcenturyfans.cn/js/jquery-3.4.1.min.js"></script>
+	<style type="text/css">
+		#start_menu{
+			position: fixed;
+			width: 400px;
+			height: 400px;
+			top: 20%;
+			left: 50%;
+			transform: translate(-50%, 0);
+		}
+		.dynamic_window{
+			transition: height 0.5s;
+		}
+		.dynamic_window .window_head{
+			position: absolute;
+			width: auto;
+			height: 50px;
+			top: 0;
+
+			font-size: 25px;
+
+			display: flex;
+			justify-content: space-around;
+		}
+		.dynamic_window .window_head .head_item{
+			cursor: pointer;
+			margin-left: 20px;
+		}
+		/*浅蓝*/
+		.head_item:hover , .head_item.active{
+			color:rgb(30,144,255);
+		}
+		/*深蓝*/
+		.head_item:active {
+			color:rgb(30,100,200);
+		}
+		/*上下文指示光标*/
+		.dynamic_window #window_linker{
+			position: absolute;
+			top: 30px;
+		    left: 10px;
+		    transition: left 0.5s;
+			border-left: 20px solid transparent;
+		    border-right: 20px solid transparent;
+		    border-bottom: 20px solid #ffffff;
+		     	    
+		}
+		.dynamic_window #window_linker::after {	
+		    content: '';
+		    position: absolute;
+		    z-index: -1;
+		    top: 5px;
+		    left: 0;
+		    border-left: 20px solid transparent;
+		    border-right: 20px solid transparent;
+		    border-bottom: 20px solid #000;
+		    position: absolute;
+		    margin-left: -12px;
+		     
+		    filter: blur(10px);
+		 }
+		.dynamic_window .window_body{
+			z-index: -1;
+			position: absolute;
+			height: calc(100% - 50px);
+			width: 100%;
+			top: 50px;
+		
+			background-color: white;
+			border-radius: 10px;
+			box-shadow: 10px 10px 25px #ccc;
+		}
+		.content_page{
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%,-50%);
+		}
+	</style>
+	<script type="text/javascript">
+		var UI_start_menu={
+			index:null,
+			dom:null,
+			index_items:null,
+			content_pages:null,
+			window_linker:null,
+			child_UI:{},
+			initialize:function(root_dom,index) {
+				//检索并绑定dom
+				this.dom = root_dom;
+				this.window_linker = document.getElementById("window_linker");
+				this.index_items = document.getElementsByClassName("head_item");
+				this.content_pages = document.getElementsByClassName("content_page");
+				//隐藏页面
+				for(let page of this.content_pages){
+					page.style.display = "none";
+				}
+				//绑定事件
+				for(let i=0;i<this.index_items.length;i++){
+					this.index_items[i].index = i;
+					this.index_items[i].addEventListener("click",function(){
+						UI_start_menu.setMenuIndex(this.index);
+					});
+				}
+				//设置界面
+				this.setMenuIndex(index,true);
+			},
+			setMenuIndex:function(index,inital){
+				if(this.index==index){return;}
+				this.resetMenu();
+				//移除之前的激活状态
+				if(!inital){
+					this.index_items[this.index].classList.remove("active");
+					$(this.content_pages[this.index]).fadeOut("fast");	
+				}				
+				//设置index
+				this.index = index;
+				if(this.index==1){
+					this.shrinkMenu();
+				}
+				this.index_items[index].classList.add("active");
+				//有自己的UI则调用onSelect自行处理
+				if(!!this.child_UI[index]){
+					this.child_UI[index].onSelect();
+				}
+				else{
+					$(this.content_pages[this.index]).fadeIn("fast");
+				}
+				this.window_linker.style.left = this.index_items[index].offsetLeft + this.index_items[index].offsetWidth / 2 - 20 + "px";
+			},
+			resetMenu:function(){
+				this.unshrinkMenu();
+			},
+			unshrinkMenu:function(){
+				this.dom.style.height = "";
+			},
+			shrinkMenu:function(){
+				this.dom.style.height = "140px";
+			}
+		}
+	</script>
+</head>
+<body>
+	<div id="start_menu" class="dynamic_window">
+	<div class="window_head"><span class="head_item active">创建房间</span><span class="head_item">加入房间</span><span class="head_item">设置</span></div>
+	<div id="window_linker"></div>
+	<div class="window_body">
+		<div class="content_fix_page">固定内容</div>
+		<div class="content_page">页面1</div>
+		<div class="content_page">页面2</div>
+		<div class="content_page">页面3</div>
+	</div>
+	</div>
+	<script type="text/javascript">
+		UI_start_menu.initialize(document.getElementById("start_menu"),0);
+	</script>
+</body>
+</html>

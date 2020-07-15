@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>原型链继承测试</title>
+</head>
+<body>
+
+	<script type="text/javascript">
+		function Thing(){}
+		Thing.prototype.play = function(){
+			console.log("I see");
+		}
+		function Something(){}
+		Something.prototype.__proto__=Thing.prototype;
+		var a = new Something();
+		console.log(new Something() instanceof Thing);
+		Object.prototype.toString.call();
+		a.play();
+
+	</script>
+</body>
+</html>

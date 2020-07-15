@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>居中测试</title>
+	<style type="text/css">
+	.wp {
+    border: 1px solid red;
+    width: 300px;
+    height: 300px;
+	}
+
+	.box {
+	    background: green;    
+	}
+
+	.box.size{
+	    width: 100px;
+	    height: 100px;
+	}
+	.wp {
+	    display: grid;
+	}
+	.box {
+	    align-self: center;
+	    justify-self: center;
+	    display: flex;
+	    justify-content: center;
+	    align-items: center;
+}
+	</style>
+</head>
+<body>
+	<div class="wp">
+    <div class="box size">123123</div>
+</div>
+</body>
+</html>

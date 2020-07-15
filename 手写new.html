@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>手动实现new</title>
+	<script type="text/javascript">
+		// function newObj(constructor,...parameters){
+		// 	var Obj = {};
+		// 	constructor.apply(Obj,parameters);
+		// 	Obj.__proto__ = constructor.prototype;
+		// 	return Obj;
+		// }
+		// function MyObj(name){
+		// 	this.name = name;
+		// }
+		// MyObj.prototype.hello = function(){
+		// 	console.log(this.name);
+		// }
+		// var a = newObj(MyObj,"Alex");
+		// console.log(a);
+		// a.hello();
+
+		function Person(name,age){
+			this.name = name;
+			this.age = age;
+		}
+		Person.prototype.showScore = function(){
+			console.log(this.age);
+		}
+		function Student(name,age,score){
+			this.vsuper(name,age);
+			this.score = score;
+		}
+		function inherit(child,father){
+			child.prototype.vsuper = function(...params){
+				father.apply(this,params);
+			}
+			child.prototype.__proto__ = father.prototype;
+		}
+		Student.prototype.showScore = function(){
+			console.log(this.score);
+		}
+
+		function PrimaryStudent(name,age,score,year){
+			this.vsuper(name,age,score);
+			this.year = year;
+		}	
+
+		inherit(Student,Person);
+		inherit(PrimaryStudent,Student);
+		var stu = new PrimaryStudent("Alex",15,90,2);
+		console.log(stu);
+		stu.showScore();
+	</script>
+</head>
+<body>
+
+</body>
+</html>

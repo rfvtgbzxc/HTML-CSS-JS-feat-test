@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>选择器展示</title>
+	<style type="text/css">
+	div > p1:first-child p:nth-of-type(2n+1),other
+	{color:red;}
+	</style>
+</head>
+<body>
+	<div>展示一个结合了四个层次的选择器：</div>
+	<div>
+		<p1>
+			<p>内容0</p>
+			<div>内容0.5</div>
+			<p type="important" class="xi">内容1</p>
+			<p type="important" class="xi">内容2</p>
+			<p type="important">内容3</p>
+		</p1>
+		<p1>
+			<p type="important" class="xi">内容4</p>
+			<p type="important" class="xi">内容5</p>
+		</p1>
+	<div>
+	<other>内容6</other>
+</body>
+</html>

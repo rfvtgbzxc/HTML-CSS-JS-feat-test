@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- meta使用viewport以确保页面可自由缩放 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>触摸事件</title>
+    <!-- 引入 jQuery 库 -->
+    <script src="http://apps.bdimg.com/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            //手指触摸屏幕时触发事件
+            $('body').on('touchstart', function (e) {
+                $('p').css({'color': '#f00'});
+                console.log("用户手指触摸到屏幕...");
+            });
+            //手指在屏幕上移动时触发
+            $('body').on('touchmove', function (even) {
+                $('p').css({'color': '#0f0'});
+                console.log("用户手指在屏幕上移动...");
+            });
+            //手指离开屏幕时触发
+            $('body').on('touchend', function () {
+                $('p').css({'color': '#00f'});
+                console.log("用户手离开屏幕...");
+            });
+        });
+    </script>
+</head>
+<body>
+<p>
+    工人阶级是我国的领导阶级，是全面建成小康社会、坚持和发展中国特色社会主义的...<br>
+    在中国工会第十七次全国代表大会即将召开之际，让我...<br>
+    工人阶级是我们党最坚实最可靠的阶级基础...<br>
+    我国工人阶级是我们党最坚实最可靠的阶级基础。我国工人阶级从来都具有走在...<br>
+    工人阶级和广大劳动群众始终是推动我国经济社会发展、维护社会安定团结的根本...<br>
+    改革开放以来，我国工人阶级队伍不断壮大，素质全面提高，结构更加优化，面貌焕然...<br>
+</p>
+</body>
+</html>

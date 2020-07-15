@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>如题</title>
+</head>
+<body>
+	<script type="text/javascript">
+		class baseClass{
+			run(){
+				console.log("run??");
+			}
+		}
+		var ax={
+			childClass :class extends baseClass{
+
+			}
+		}
+		var bb = new ax.childClass();
+		bb.run();
+	</script>
+</body>
+</html>

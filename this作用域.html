@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>this作用域检查</title>
+</head>
+<body>
+
+	<script type="text/javascript">
+		alert(["?"].map(Number).toString());
+		var myobj={
+			show_name:function(){
+				alert(this.name);
+			}
+		}
+		var newobj={
+			name:"test",
+			show_name:myobj.show_name
+		}
+		myobj.show_name.apply(newobj);
+		newobj.show_name();
+	</script>
+</body>
+</html>

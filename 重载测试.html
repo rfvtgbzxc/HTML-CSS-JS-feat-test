@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>重载测试</title>
+</head>
+<body>
+	<script type="text/javascript">
+		/*
+		var a={
+			content:[1,2],
+			valueOf:function(){
+				return this.content;
+			},
+			union:function(new_arr){
+				var arr=this.content;
+				this.content=this.content.concat(new_arr.filter(function(v) {
+        			return this.content.indexOf(v) === -1},this));
+				return this;
+			}
+		}
+		alert(a.union([2,3]).content);*/
+		function flat(...input_arr){
+		    var output_arr=[];
+		    for(let unit of input_arr){
+		        if(unit instanceof Array){
+		        	let result = flat.apply(this,unit);  
+		            output_arr.push(...result)
+		            console.log(...output_arr);
+		        }
+		        else{
+					output_arr.push(unit);
+				}
+		    }
+		    return output_arr
+		}
+		var arr = flat.apply(this,[1,[2,3,[4,5],[6]]]);
+		//alert(arr);
+		/*
+		function flat(input_arr){
+		    output_arr=[];
+		    for(let unit of input_arr){
+		        if(typeof(unit)=="object"){
+		            output_arr.push(...unit)
+		        }
+		        else{
+		        	output_arr.push(unit);
+		        }
+		    }
+		    return output_arr
+		}
+		var arr = flat([1,[2,3,[4,5],[6]]]);
+		alert(arr);*/
+		/*function Mystack(){
+		    this.bottom= new Unit(null,null);
+		    this.top = this.bottom;
+		    this.count=0;
+		}
+		function Unit(value,prev){
+		    this.prev = prev;
+		    this.value = value;
+		}
+		Mystack.prototype.push = function(val){
+		    this.top = new Unit(val,this.top);
+		    this.count++;
+		}
+		Mystack.prototype.pop = function(val){
+		    if(this.top.value==null){
+		        return undefined;
+		    }
+		    else{
+		        var out = this.top.value;
+		        this.top = this.top.prev;
+		        this.count--;
+		        return out;
+		    }  
+		}
+		Mystack.prototype.max = function(){
+		    return count;
+		}
+		stack = new Mystack();
+		stack.push(1);
+		stack.push(2);
+		stack.push(3);
+		alert(stack.pop());
+		alert(stack.pop());
+		alert(stack.pop());*/
+		/*function makeAllQueue(...input_arrs){
+			var out_arr=[];
+			var fst=true;
+			for(let arr of input_arrs){
+				if(fst){
+					for(let unit of arr){
+						out_arr.push([unit]);
+					}
+					fst=false;
+				}
+				for(let out_unit of out_arr){
+					for(let insert_unit of arr){
+						out_unit.push(out_unit.concat(insert_unit));
+					}
+					out_arr.unshift();
+				}
+			}
+			return out_arr;
+		}*/
+		/*function check_bin_tree(tree){
+			var nodes=[tree.fst_node];
+			var last_node = false;
+			var count = 0;
+			var leve1 = 1;
+			while(true){
+				var node = nodes.pop();
+				if(node.left==null){
+					last_node = true;
+				}
+				else{
+					nodes.unshift(node.left);
+				}
+				if(node.right==null){
+					last_node = true;
+				}
+				else{
+					nodes.unshift(node.right);
+				}
+				count++;
+				if(count>Math.pow(2,level)){
+					if(last_node){
+						return false;
+					}
+					else{
+						level++;
+						count=0;
+					}
+				}
+			}
+		}*/
+	</script>
+</body>
+</html>

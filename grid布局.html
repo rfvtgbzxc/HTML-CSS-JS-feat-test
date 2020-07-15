@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>gird布局</title>
+    <style>
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill,minmax(200px, 1fr));
+            grid-auto-rows:200px;
+            gap: 10px;
+            background-color: #2196F3;
+            padding: 10px;
+        }
+
+        .grid-container > div {
+        	display:flex;
+        	justify-content: center;
+        	align-items: center;
+
+            background-color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            padding: 20px 0;
+            font-size: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>使用grid搭建一个强大的自适应页面</h1>
+
+<p>该页面的单元会随着页面宽度变化而变化，且过小时会自动换行</p>
+<div class="grid-container">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+    <div>6</div>
+    <div>7</div>
+    <div>8</div>
+</div>
+
+</body>
+</html>

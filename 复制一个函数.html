@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>复制一个函数</title>
+</head>
+<body>
+	<script type="text/javascript">
+		/*class Test{
+			f1(){
+				console.log(1);
+			}
+		}
+		var f2 = Test.prototype.f1;
+		Test.prototype.f1 = function(){
+			f2();
+			console.log(2);
+		}
+		var a = new Test();
+		a.f1();*/
+		var f1 = function() {
+			console.log(1);
+		}
+		var f2 = f1;
+		f1 = function() {
+			f2();
+			console.log(2);
+		}
+		var f3 = f1;
+		f1 = function() {
+			f3();
+			console.log(3);
+		}
+		f1();
+	</script>
+</body>
+</html>

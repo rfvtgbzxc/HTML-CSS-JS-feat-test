@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>简单的播放条</title>
+	<style type="text/css">
+		replay_controller{
+			position: fixed;
+			width: 400px;
+			height: 100px;
+			bottom: 20px;
+			left: 50%;
+			transform: translate(-50%, 0);
+			background-color: white;
+			border-radius: 10px;
+			box-shadow: 10px 10px 25px #ccc;
+
+			display: flex;
+			justify-content: space-around;
+			align-items: center;
+		}
+		replay_controller action_play{
+			cursor: pointer;
+			width: 60px;
+			height: 70px;
+		}
+		replay_controller action_play.play:after{
+			content: "";
+			position: absolute;
+			width: 60px;
+			height: 70px;
+			shape-outside: polygon(0 0,60px 35px,0 70px);
+    		clip-path: polygon(0 0,60px 35px,0 70px);
+    		background-color: rgba(30,144,255,0.9);		
+    	}
+		replay_controller action_play.pause:after{
+			content: "";
+			position: absolute;
+			height: 70px;
+			border-style: double;
+    		border-width: 0px 0px 0px 60px;
+    		border-color: rgba(30,144,255,0.9);	
+    	}
+    	replay_controller action_play.pause:hover:after{
+    		border-color: rgba(30,144,255,1);
+    	}
+    	replay_controller action_play.play:hover:after{
+    		background-color: rgba(30,144,255,1);
+    	}
+    	    		
+    	replay_controller action_step_next{
+    		cursor: pointer;
+			width: 60px;
+			height: 70px;
+		}
+		replay_controller action_step_next:after{
+			content: "";
+			position: absolute;
+			width: 60px;
+			height: 70px;
+			shape-outside: polygon(0 0,55px 33px,55px 10px,60px 10px,60px 60px,55px 60px,55px 37px,0 70px);
+    		clip-path: polygon(0 0,55px 33px,55px 5px,60px 5px,60px 65px,55px 65px,55px 37px,0 70px);
+    		background-color: rgba(30,144,255,0.9);		
+    	}
+    	replay_controller action_step_next:hover:after{
+    		background-color: rgba(30,144,255,1);
+    	}
+		auto_play_speed{	
+			width: 50px;
+			height: 70px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			flex-direction: column;
+		}
+		set_speed{
+			cursor: pointer;
+			font-size: 20px;
+			width: 90px;
+			height: 30px;
+			display: flex;
+			justify-content: center;
+
+		}
+		set_speed:active{
+			color: rgb(30,144,255);
+		}
+		set_speed:hover{
+			color: white;
+		}
+		set_speed:hover:after{
+			content: "";
+			position: absolute;
+			width: inherit;
+			height: inherit;
+			z-index: -1;
+			background-color: rgba(30,144,255,0.5);
+		}
+		timer_updater{
+			align-self: flex-end;
+			width: 20px;
+			height: 80px;
+			margin-bottom: 10px; 
+			background-color: rgb(30,144,255);
+		}
+		timer_updater.active{
+			transition: height 1s;
+			transition-timing-function: linear;
+		}
+		timer_updater.play{
+			height: 0;
+		}
+	</style>
+</head>
+<body>
+	<replay_controller>
+		<timer_updater class="active"></timer_updater>
+		<auto_play_speed>
+			<set_speed>1x</set_speed>
+			<set_speed>2x</set_speed>
+			<set_speed>3x</set_speed>
+		</auto_play_speed>
+		<action_play class="play"></action_play>
+		<action_step_next></action_step_next>
+	</replay_controller>
+	<script type="text/javascript">
+		var timer_updater=document.getElementsByTagName("timer_updater")[0];
+		var button_play=document.getElementsByTagName("action_play")[0];
+		timer_updater.timer_f = 3;
+		button_play.addEventListener("click",()=>{
+
+			var timer_updater=document.getElementsByTagName("timer_updater")[0];
+			if(!!timer_updater.model_play){
+				timer_updater.model_play = false;
+				//停止(包括计时器)
+				timer_updater.classList.remove("active","play");
+				timer_updater.style.transitionDuration = "";
+				clearInterval(timer_updater.timer_id);
+			}
+			else{
+				timer_updater.model_play = true;
+				//启动
+				timer_updater.classList.add("active","play");
+				timer_updater.style.transitionDuration = timer_updater.timer_f + "s";
+				//启动循环
+				timer_updater.timer_id = setInterval(function(){
+					//停止
+					var timer_updater=document.getElementsByTagName("timer_updater")[0];
+					timer_updater.classList.remove("active","play");
+					timer_updater.style.transitionDuration = "";
+					//应用以上刷新以后再执行
+					requestAnimationFrame(function(){
+						//再启动
+						var timer_updater=document.getElementsByTagName("timer_updater")[0];
+						timer_updater.classList.add("active","play");
+						timer_updater.style.transitionDuration = timer_updater.timer_f + "s";
+						
+					});
+				},timer_updater.timer_f*1000);
+			}
+			
+		})
+
+	</script>
+</body>
+</html>

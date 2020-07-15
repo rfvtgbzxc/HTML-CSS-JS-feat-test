@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>悬浮弹窗</title>
+	<style type="text/css">
+		game_map
+		{
+			position: absolute;
+			top: 0;
+			width: 0;
+		}
+		img.city
+		{
+			position: absolute;
+		}
+		.hover_window
+		{
+			position: absolute;
+			height: 100px;
+			width: 200px;
+		}
+		.hover_window .window_body
+		{
+			z-index: -1;
+			position: absolute;
+			height: calc(100% - 25px);
+			width: 100%;
+			bottom: 25px;
+
+			background-color: white;
+			border-radius: 10px;
+			box-shadow: 10px 10px 25px #ccc;
+		}
+		.hover_window .window_linker{
+			position: absolute;
+			bottom: 0;
+		    left: calc(50% - 20px);
+		    transition: left 0.5s;
+			border-left: 20px solid transparent;
+		    border-right: 20px solid transparent;
+		    border-top: 25px solid #ffffff;
+		     	    
+		}
+		.hover_window .window_linker::after {	
+		    content: '';
+		    position: absolute;
+		    z-index: -1;
+		    top: -25px;
+		    left: 0;
+		    border-left: 20px solid transparent;
+		    border-right: 20px solid transparent;
+		    border-top: 25px solid rgba(0,0,0,0.5);
+		    position: absolute;
+		    margin-left: -13px;
+		     
+		    filter: blur(6px);
+		 }
+	</style>
+	<script type="text/javascript">
+		
+	</script>
+</head>
+<body>
+<div class="game_map">
+	<img class="city" style="left:40%;top:300px;" src="city_lv0_dark-green.png">
+	<div class="hover_window">	
+		<div class="window_linker"></div>
+		<div class="window_body"></div>
+	</div>
+</div>
+</body>
+</html>

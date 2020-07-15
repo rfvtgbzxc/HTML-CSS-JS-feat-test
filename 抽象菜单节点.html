@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>抽象菜单节点测试</title>
+	<script type="text/javascript">
+		//----------------------------------------------------------
+		// MenuController 菜单控制器
+		//----------------------------------------------------------
+		function MenuController(){};
+		MenuController.rootNode = new Node();
+		MenuController.nodes = [];
+		MenuController.activeNodes=[MenuController.rootNode];
+		MenuController.visibleNodes=[];
+		MenuController.addNode = function(nodeInfo){
+			
+		}
+		MenuController.initialize = function(max_level){
+			for(let i=0;i<=max_level;i++){
+				visibleNodes[i] = [];
+			}
+			this.refresh();
+		}
+		MenuController.refresh = function(){
+			for(let node of this.nodes){
+				node.refresh();
+				node.update();
+			}
+			for(let i=1;i<activeNodes.length;i++){
+				this.refreshMenuList(i);
+			}
+		}
+		MenuController.refreshMenuList = function(menuListLevel){
+			this.menuListDom[menuListLevel].style.top = this.menuListDom[menuListLevel-1].offsetTop - this.visibleNodes[menuListLevel].length*25 + "px";
+		};
+		MenuController.selectNode = function(menuNode){	
+			//node为activeNodes中的一员,则等同于从更高一级重新加载菜单
+			if(this.activeNodes[menuNode.level]===menuNode){
+				this.shrinkMenu(menuNode.level-1);
+				this.spreadMenu(this.activeNodes[this.activeNodes.length-1]);
+			}
+			else{
+				//node处于无效状态,则不作处理
+				if(menuNode.disabled){return;}
+				this.shrinkMenu(menuNode.level-1);
+				this.spreadMenu(this.activeNodes[this.activeNodes.length-1]);
+				//激活节点,展开其可能的子节点
+				MenuController.activeNodes.push(menuNode);
+				this.spreadMenu(menuNode);
+				menuNode.highlight();
+				//执行节点对应功能函数
+				menuNode.action();		
+			}	
+		}
+		//----------------------------------------------------------
+		// 折叠菜单到某一层为止,目标层级以外的节点会被全部隐藏
+		//----------------------------------------------------------
+		MenuController.shrinkMenu = function(level){
+			for(let i=level;i<this.activeNodes.length;i++){
+				for(let node of this.activeNodes[i].childNodes){
+					node.hide();
+				}
+			}
+			//level从0开始计
+			this.activeNodes.length = level+1;
+		}
+		//----------------------------------------------------------
+		// 展开菜单某个节点的子节点
+		//----------------------------------------------------------
+		MenuController.spreadMenu = function(fatherNode){
+			this.menuListDom[menuListLevel+1].length=0;
+			for(let node of fatherNode.childNodes){
+				if(node.visible){node.show();}
+			}
+			//安置按钮组位置
+			this.refreshMenuList(fatherNode.level+1);
+		}
+		//----------------------------------------------------------
+		// Node 节点类
+		//----------------------------------------------------------
+		function Node(node_info={}){
+			this.level = node_info.level||0;
+			this.name = node_info.name||"";
+			this.dom = node_info.dom||null;
+			this.fatherNode = node_info.fatherNode||null;
+			this.childNodes = node_info.childNodes||[];
+			this.disabled = node_info.disabled||false;
+			this.visible = node_info.visible||true;	
+			this.refresh = node_info.refresh||null;
+			this.action = node_info.action||null;
+		}
+		//----------------------------------------------------------
+		// 更新节点
+		//----------------------------------------------------------
+		Node.prototype.update = function(){
+			if(this.disabled){
+				this.dom.classList.add("part_disabled");
+			}
+			else{
+				this.dom.classList.remove("part_disabled");
+			}
+		}
+		//----------------------------------------------------------
+		// 显示节点
+		//----------------------------------------------------------
+		Node.prototype.show = function(){	
+			//显示
+			this.dom.style.display = "";
+		}
+		//----------------------------------------------------------
+		// 隐藏节点
+		//----------------------------------------------------------
+		Node.prototype.hide = function(){
+			this.dom.classList.reomve("active");
+			this.dom.style.display = "none";
+		}
+		//----------------------------------------------------------
+		// 高亮节点
+		//----------------------------------------------------------
+		Node.prototype.highlight = function(){
+			this.dom.classList.add("active");
+		}
+	</script>
+</head>
+<body>
+</body>
+</html>

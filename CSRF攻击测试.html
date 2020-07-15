@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>CSRF测试</title>
+	<script type="text/javascript" src="jquery-3.4.1.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			/*
+			$("p").click(function(){
+				$.ajax({
+					url:"http://192.168.50.140/gametest/",
+					type:"get",
+					dataType:"html",
+					headers:{"Accept":"text/html","Host": "192.168.50.140"},
+					//contentType:"text/html",
+					success:function(html){
+						console.log(html);
+					}
+				});
+			})*/
+			
+		});
+		document.domain = '192.168.50.140'; 
+	</script>
+</head>
+<body>
+	&lt;script&gt;alert(&#39;你完蛋了&#39;)&lt;/script&gt;
+	<iframe src="http://192.168.50.140/gametest/"></iframe>
+</body>
+</html>

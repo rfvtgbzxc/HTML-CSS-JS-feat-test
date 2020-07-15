@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>flex布局展示</title>
+	<style type="text/css">
+		flex-9-box{
+			display: flex;
+		}
+		flex-9-items{
+			flex-grow:1;
+			height: 200px;
+			background: lightblue;
+			border: lightyellow solid 10px;
+		}
+	</style>
+</head>
+<body>
+	<div>使用flex实现九宫格,要求高度固定600px,宽度随边框变化</div>
+	<div>
+		<flex-9-box>
+		<flex-9-items></flex-9-items>
+		<flex-9-items></flex-9-items>
+		<flex-9-items></flex-9-items>
+		</flex-9-box>
+		<flex-9-box>
+			<flex-9-items></flex-9-items>
+			<flex-9-items></flex-9-items>
+			<flex-9-items></flex-9-items>
+		</flex-9-box>
+		<flex-9-box>
+			<flex-9-items></flex-9-items>
+			<flex-9-items></flex-9-items>
+			<flex-9-items></flex-9-items>
+		</flex-9-box>
+	</div>
+</body>
+</html>

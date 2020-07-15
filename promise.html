@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>promise</title>
+</head>
+<body>
+
+	<script type="text/javascript">
+		/*(resolve,reject)=>setTimeout(()=>{
+			console.log("a"),10;
+			resolve();
+		})*/
+		/*var i=0;
+		setTimeout(()=>console.log("a"));
+		var a = Promise.resolve().then(()=>console.log(i++)).then(()=>console.log(i++));
+		a.then(()=>console.log(i));
+		/*.then(()=>console.log("b"),()=>console.log("c"));*/
+		/*
+		function greet(resolve,reject){
+			setTimeout(()=>resolve("resolved"),1000);
+			
+		}
+		var b = new Promise(greet);
+		b.then((result)=>{
+			console.log(result);
+			return new Promise(greet);
+		}).then((result)=>{
+			console.log(result);
+			return new Promise(greet);
+		}).then((result)=>console.log(result));*/
+		var stop_up_to_you;
+		var c = new Promise((resolve)=>stop_up_to_you=()=>resolve()).then((result)=>{console.log("final..."+result);return new Promise((resolve)=>console.log("pause"))}).then(()=>console.log("how ever..."));
+	</script>
+</body>
+</html>

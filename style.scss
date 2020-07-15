@@ -1,0 +1,390 @@
+/*$sprite_name:road_sprites.png;
+@mixin road-splice($column_index, $row_index){
+	background:{
+		image: url('/#{$sprite_name}');
+		position: 20px * $column_index 30px * $row_index;		
+	}
+}
+
+.road{
+	@for $i form 0 through 3{
+		&dir_#{$i} {
+			@include road-splice($i,2);
+		}
+	}
+}
+
+$sprite_name:"road_sprites.png";
+@mixin test($column_index,$row_index){
+	background: {
+		image: url(/media.img/#{$sprite_name});
+		position: 20px * $column_index 30px * $row_index;
+	}	
+}
+.road{
+	position: absolute;
+	height: 120px;
+	width: 139px;
+	@for $i from 0 through 2 {
+		&.dir_#{$i} { 
+			@for $j from 0 through 2 {
+				&.color_#{$j}{
+					@include test($i,$j);
+				}	
+			}
+		}
+	}
+}
+
+@mixin test($sprite_file_name,$column_width,$column_index,$row_height,$row_index){
+	background: {
+		image: url(/media.img/#{$sprite_file_name});
+		position: -1 * $column_width * $column_index -1 * $row_height * $row_index;
+	}	
+}
+div{
+@include test("road_sprites.png",111px,1,222px,1);
+}
+
+.map_sprite{
+	position: absolute;
+	&.road{
+		$column_width: 139px;
+		$row_height: 120px;
+		$column_name: dir;
+		$row_name: color;
+		$column_size:3;
+
+		width: $column_width;
+		height: $row_height;
+		@for $i from 0 to $column_size {
+			@for $j from 0 through 2 {
+				&.#{$column_name}-#{$i}_#{$row_name}-#{$j}{
+					@include test("road_sprites.png",$column_width,$i,$row_height,$j);
+				}	
+			}
+		}
+	}
+}
+*/
+
+sprite{
+	position: absolute;
+}
+@mixin splice($sprite_file_name,$column_width,$column_index,$row_height,$row_index){
+	background: {
+		image: url(/media/img/#{$sprite_file_name});
+		position: -1 * $column_width * $column_index -1 * $row_height * $row_index;
+	}	
+}
+//--------------------------------------------------
+// 一维图片分割器
+//--------------------------------------------------
+@mixin sprite_slicer_1D($sprite_file_name,$sprite_name,
+	$column_name,$column_width,$column_size,$col_st_index,
+	$row_height){
+	&.#{$sprite_name}{
+		width: $column_width;
+		height: $row_height;
+		@for $i from 0 to $column_size {
+			&.#{$column_name}-#{$i + $col_st_index}{
+				@include splice($sprite_file_name,$column_width,$i,$row_height,0);
+			}	
+		}
+	}
+}
+//--------------------------------------------------
+// 二维图片分割器
+//--------------------------------------------------
+@mixin sprite_slicer_2D($sprite_file_name,$sprite_name,
+	$column_name,$column_width,$column_size,$col_st_index,
+	$row_name,$row_height,$row_size,$row_st_index){
+	&.#{$sprite_name}{
+		width: $column_width;
+		height: $row_height;
+		@for $j from 0 to  $row_size {
+			@for $i from 0 to $column_size {
+				&.#{$column_name}-#{$i + $col_st_index}_#{$row_name}-#{$j + $row_st_index}{
+					@include splice($sprite_file_name,$column_width,$i,$row_height,$j);
+				}	
+			}		
+		}	
+	}
+}
+
+sprite{
+	//道路(方向+颜色)
+	@include sprite_slicer_2D("road_sprites.png",road,
+	dir,139px,3,0,
+	color,120px,3,1);
+	//城市(等级+颜色)
+	@include sprite_slicer_2D("city_sprites.png",city,
+	lv,45px,3,0,
+	color,35px,2,1);
+	//地块(类型)
+	@include sprite_slicer_1D("place_sprites.png",place,
+	type,139px,6,0,
+	120px);
+	//产出数字(数字)
+	@include sprite_slicer_1D("numpic_sprites.png",numpic,
+	num,139px,11,2,
+	120px);
+	//海港(方向)
+	@include sprite_slicer_1D("harbour_sprites.png",habour,
+	dir,402px,6,0,
+	348px);
+	//资源图标-海港(类型)
+	@include sprite_slicer_1D("harbour_icon_sprites.png",player_back,
+	type,47px,6,0,
+	47px);
+	//资源图标-标准(类型)
+	@include sprite_slicer_1D("src_icon_sprites.png",player_back,
+	type,47px,6,0,
+	47px);
+	//骰子点数(数字)
+	@include sprite_slicer_1D("dice_num_sprites.png",numpic,
+	num,50px,7,0,
+	50px);
+	//海港产出数字(方向+数字)
+	@include sprite_slicer_2D("harbour_num_sprites.png",harbournum,
+	dir,402px,6,0,
+	num,348px,2,2);
+}
+
+sprite {
+  position: absolute; }
+
+sprite.road {
+  width: 139px;
+  height: 120px; }
+  sprite.road.dir-0_color-1 {
+    background-image: url(/media/img/road_sprites.png);
+    background-position: 0px 0px; }
+  sprite.road.dir-1_color-1 {
+    background-image: url(/media/img/road_sprites.png);
+    background-position: -139px 0px; }
+  sprite.road.dir-2_color-1 {
+    background-image: url(/media/img/road_sprites.png);
+    background-position: -278px 0px; }
+  sprite.road.dir-0_color-2 {
+    background-image: url(/media/img/road_sprites.png);
+    background-position: 0px -120px; }
+  sprite.road.dir-1_color-2 {
+    background-image: url(/media/img/road_sprites.png);
+    background-position: -139px -120px; }
+  sprite.road.dir-2_color-2 {
+    background-image: url(/media/img/road_sprites.png);
+    background-position: -278px -120px; }
+  sprite.road.dir-0_color-3 {
+    background-image: url(/media/img/road_sprites.png);
+    background-position: 0px -240px; }
+  sprite.road.dir-1_color-3 {
+    background-image: url(/media/img/road_sprites.png);
+    background-position: -139px -240px; }
+  sprite.road.dir-2_color-3 {
+    background-image: url(/media/img/road_sprites.png);
+    background-position: -278px -240px; }
+sprite.city {
+  width: 45px;
+  height: 35px; }
+  sprite.city.lv-0_color-1 {
+    background-image: url(/media/img/city_sprites.png);
+    background-position: 0px 0px; }
+  sprite.city.lv-1_color-1 {
+    background-image: url(/media/img/city_sprites.png);
+    background-position: -45px 0px; }
+  sprite.city.lv-2_color-1 {
+    background-image: url(/media/img/city_sprites.png);
+    background-position: -90px 0px; }
+  sprite.city.lv-0_color-2 {
+    background-image: url(/media/img/city_sprites.png);
+    background-position: 0px -35px; }
+  sprite.city.lv-1_color-2 {
+    background-image: url(/media/img/city_sprites.png);
+    background-position: -45px -35px; }
+  sprite.city.lv-2_color-2 {
+    background-image: url(/media/img/city_sprites.png);
+    background-position: -90px -35px; }
+sprite.place {
+  width: 139px;
+  height: 120px; }
+  sprite.place.type-0 {
+    background-image: url(/media/img/place_sprites.png);
+    background-position: 0px 0px; }
+  sprite.place.type-1 {
+    background-image: url(/media/img/place_sprites.png);
+    background-position: -139px 0px; }
+  sprite.place.type-2 {
+    background-image: url(/media/img/place_sprites.png);
+    background-position: -278px 0px; }
+  sprite.place.type-3 {
+    background-image: url(/media/img/place_sprites.png);
+    background-position: -417px 0px; }
+  sprite.place.type-4 {
+    background-image: url(/media/img/place_sprites.png);
+    background-position: -556px 0px; }
+  sprite.place.type-5 {
+    background-image: url(/media/img/place_sprites.png);
+    background-position: -695px 0px; }
+sprite.numpic {
+  width: 139px;
+  height: 120px; }
+  sprite.numpic.num-2 {
+    background-image: url(/media/img/numpic_sprites.png);
+    background-position: 0px 0px; }
+  sprite.numpic.num-3 {
+    background-image: url(/media/img/numpic_sprites.png);
+    background-position: -139px 0px; }
+  sprite.numpic.num-4 {
+    background-image: url(/media/img/numpic_sprites.png);
+    background-position: -278px 0px; }
+  sprite.numpic.num-5 {
+    background-image: url(/media/img/numpic_sprites.png);
+    background-position: -417px 0px; }
+  sprite.numpic.num-6 {
+    background-image: url(/media/img/numpic_sprites.png);
+    background-position: -556px 0px; }
+  sprite.numpic.num-7 {
+    background-image: url(/media/img/numpic_sprites.png);
+    background-position: -695px 0px; }
+  sprite.numpic.num-8 {
+    background-image: url(/media/img/numpic_sprites.png);
+    background-position: -834px 0px; }
+  sprite.numpic.num-9 {
+    background-image: url(/media/img/numpic_sprites.png);
+    background-position: -973px 0px; }
+  sprite.numpic.num-10 {
+    background-image: url(/media/img/numpic_sprites.png);
+    background-position: -1112px 0px; }
+  sprite.numpic.num-11 {
+    background-image: url(/media/img/numpic_sprites.png);
+    background-position: -1251px 0px; }
+  sprite.numpic.num-12 {
+    background-image: url(/media/img/numpic_sprites.png);
+    background-position: -1390px 0px; }
+sprite.habour {
+  width: 402px;
+  height: 348px; }
+  sprite.habour.dir-0 {
+    background-image: url(/media/img/harbour_sprites.png);
+    background-position: 0px 0px; }
+  sprite.habour.dir-1 {
+    background-image: url(/media/img/harbour_sprites.png);
+    background-position: -402px 0px; }
+  sprite.habour.dir-2 {
+    background-image: url(/media/img/harbour_sprites.png);
+    background-position: -804px 0px; }
+  sprite.habour.dir-3 {
+    background-image: url(/media/img/harbour_sprites.png);
+    background-position: -1206px 0px; }
+  sprite.habour.dir-4 {
+    background-image: url(/media/img/harbour_sprites.png);
+    background-position: -1608px 0px; }
+  sprite.habour.dir-5 {
+    background-image: url(/media/img/harbour_sprites.png);
+    background-position: -2010px 0px; }
+sprite.player_back {
+  width: 47px;
+  height: 47px; }
+  sprite.player_back.type-0 {
+    background-image: url(/media/img/harbour_icon_sprites.png);
+    background-position: 0px 0px; }
+  sprite.player_back.type-1 {
+    background-image: url(/media/img/harbour_icon_sprites.png);
+    background-position: -47px 0px; }
+  sprite.player_back.type-2 {
+    background-image: url(/media/img/harbour_icon_sprites.png);
+    background-position: -94px 0px; }
+  sprite.player_back.type-3 {
+    background-image: url(/media/img/harbour_icon_sprites.png);
+    background-position: -141px 0px; }
+  sprite.player_back.type-4 {
+    background-image: url(/media/img/harbour_icon_sprites.png);
+    background-position: -188px 0px; }
+  sprite.player_back.type-5 {
+    background-image: url(/media/img/harbour_icon_sprites.png);
+    background-position: -235px 0px; }
+sprite.player_back {
+  width: 47px;
+  height: 47px; }
+  sprite.player_back.type-0 {
+    background-image: url(/media/img/src_icon_sprites.png);
+    background-position: 0px 0px; }
+  sprite.player_back.type-1 {
+    background-image: url(/media/img/src_icon_sprites.png);
+    background-position: -47px 0px; }
+  sprite.player_back.type-2 {
+    background-image: url(/media/img/src_icon_sprites.png);
+    background-position: -94px 0px; }
+  sprite.player_back.type-3 {
+    background-image: url(/media/img/src_icon_sprites.png);
+    background-position: -141px 0px; }
+  sprite.player_back.type-4 {
+    background-image: url(/media/img/src_icon_sprites.png);
+    background-position: -188px 0px; }
+  sprite.player_back.type-5 {
+    background-image: url(/media/img/src_icon_sprites.png);
+    background-position: -235px 0px; }
+sprite.dice {
+  width: 50px;
+  height: 50px; }
+  sprite.dice.num-0 {
+    background-image: url(/media/img/dice_num_sprites.png);
+    background-position: 0px 0px; }
+  sprite.dice.num-1 {
+    background-image: url(/media/img/dice_num_sprites.png);
+    background-position: -50px 0px; }
+  sprite.dice.num-2 {
+    background-image: url(/media/img/dice_num_sprites.png);
+    background-position: -100px 0px; }
+  sprite.dice.num-3 {
+    background-image: url(/media/img/dice_num_sprites.png);
+    background-position: -150px 0px; }
+  sprite.dice.num-4 {
+    background-image: url(/media/img/dice_num_sprites.png);
+    background-position: -200px 0px; }
+  sprite.dice.num-5 {
+    background-image: url(/media/img/dice_num_sprites.png);
+    background-position: -250px 0px; }
+  sprite.dice.num-6 {
+    background-image: url(/media/img/dice_num_sprites.png);
+    background-position: -300px 0px; }
+sprite.harbournum {
+  width: 402px;
+  height: 348px; }
+  sprite.harbournum.dir-0_num-2 {
+    background-image: url(/media/img/harbour_num_sprites.png);
+    background-position: 0px 0px; }
+  sprite.harbournum.dir-1_num-2 {
+    background-image: url(/media/img/harbour_num_sprites.png);
+    background-position: -402px 0px; }
+  sprite.harbournum.dir-2_num-2 {
+    background-image: url(/media/img/harbour_num_sprites.png);
+    background-position: -804px 0px; }
+  sprite.harbournum.dir-3_num-2 {
+    background-image: url(/media/img/harbour_num_sprites.png);
+    background-position: -1206px 0px; }
+  sprite.harbournum.dir-4_num-2 {
+    background-image: url(/media/img/harbour_num_sprites.png);
+    background-position: -1608px 0px; }
+  sprite.harbournum.dir-5_num-2 {
+    background-image: url(/media/img/harbour_num_sprites.png);
+    background-position: -2010px 0px; }
+  sprite.harbournum.dir-0_num-3 {
+    background-image: url(/media/img/harbour_num_sprites.png);
+    background-position: 0px -348px; }
+  sprite.harbournum.dir-1_num-3 {
+    background-image: url(/media/img/harbour_num_sprites.png);
+    background-position: -402px -348px; }
+  sprite.harbournum.dir-2_num-3 {
+    background-image: url(/media/img/harbour_num_sprites.png);
+    background-position: -804px -348px; }
+  sprite.harbournum.dir-3_num-3 {
+    background-image: url(/media/img/harbour_num_sprites.png);
+    background-position: -1206px -348px; }
+  sprite.harbournum.dir-4_num-3 {
+    background-image: url(/media/img/harbour_num_sprites.png);
+    background-position: -1608px -348px; }
+  sprite.harbournum.dir-5_num-3 {
+    background-image: url(/media/img/harbour_num_sprites.png);
+    background-position: -2010px -348px; }

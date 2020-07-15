@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>阴刻文字</title>
+	<style type="text/css">
+		dev_process_list{
+			width: 99px;
+			display: flex;
+			justify-content: space-between;
+		}
+		dev_process{
+			display: inline-block;
+			width: 30px;
+			height: 30px;
+			display: flex;
+			justify-content: center;
+			align-items: flex-end;
+
+			font-size: 20px;
+			color:white;
+			-webkit-mask-image: url("normal.png");
+		}
+		dev_process.initial{
+			filter: brightness(0.7) grayscale(0.5);
+		}
+		dev_process.politic{
+			background-color: rgb(3,161,233);
+		}
+		dev_process.commerce{
+			background-color: rgb(243,153,2);
+		}
+		dev_process.science{
+			background-color: rgb(58,180,113);
+		}
+		dev_process.active{
+
+			-webkit-mask-image: url("ddh.png");
+		}
+	</style>
+</head>
+<body>
+	<dev_process_list>
+		<dev_process class="commerce">3</dev_process>	
+		<dev_process class="science">4</dev_process>	
+		<dev_process class="politic active">5</dev_process>
+	</dev_process_list>
+	<dev_process_list>
+		<dev_process class="commerce initial">0</dev_process>	
+		<dev_process class="science initial">0</dev_process>	
+		<dev_process class="politic initial">0</dev_process>
+	</dev_process_list>
+	<dev_process class="commerce active">2</dev_process>
+	<dev_process class="science active">4</dev_process>
+	<dev_process class="politic">5</dev_process>
+</body>
+</html>

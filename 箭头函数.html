@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>箭头函数对this的影响</title>
+</head>
+<body>
+
+	<script type="text/javascript">
+		var obj={
+			content:[2,3,4],
+			union:function(arr){
+				/*
+				return this.content.concat(arr.filter(function(v){
+					return this.content.indexOf(v)==-1;
+				}));*/
+				return this.content.concat(arr.filter(v=>this.content.indexOf(v)==-1));
+			}
+		}
+		var arr=[1,2,3];
+		alert(obj.union(arr));
+	</script>
+</body>
+</html>
