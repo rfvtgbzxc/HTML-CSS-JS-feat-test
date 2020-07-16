@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>如题</title>
+</head>
+<body>
+<script>
+  class Heap {
+    constructor(list) {
+      if(list){
+        this.heap = list;
+        this.length = list.length;
+      }
+      else{
+        this.heap = [];
+        this.length = 0;
+      }
+    }
+    enqueue(i) {
+      this.heap.push(i);
+      this.length += 1;
+    }
+    is_empty(){
+      return this.heap.length===0;
+    }
+    dequeue() {
+      if (!this.length)
+        return;
+      this.check_heap();
+      let val = this.heap.shift();
+      this.length -= 1;
+      return val;
+    }
+    check_heap() {
+      if (this.length === 1)
+        return;
+      let i = parseInt((this.length - 2) / 2);
+      while (i > 0) {
+        this.check(i);
+        i = parseInt((i - 1) / 2);
+      }
+      this.check(0);
+    }
+    check(i) {
+      let mf = this.heap[i],
+        lk = i * 2 + 1, rk = i * 2 + 2,
+        lf, rf;
+      if (lk < this.length)
+        lf = this.heap[lk]
+      if (rk < this.length)
+        rf = this.heap[rk];
+      if (rf != null && rf < mf) {
+        if (lf != null) {
+          if (lf < rf) {
+            // lf 最小
+            this.exchange_and_check(i, lk);
+          } else {
+            // rf 最小
+            this.exchange_and_check(i, rk);
+          }
+        } else {
+          // rf 最小
+          this.exchange_and_check(i, rk);
+        }
+      } else if (lf != null && lf < mf) {
+        if (rf != null) {
+          if (rf < lf) {
+            // rf 最小
+            this.exchange_and_check(i, rk);
+          } else {
+            // lf 最小
+            this.exchange_and_check(i, lk);
+          }
+        } else {
+          // lf 最小
+          this.exchange_and_check(i, lk);
+        }
+      }
+    }
+
+    exchange_and_check(father, child) {
+      [this.heap[father], this.heap[child]] = [this.heap[child], this.heap[father]];
+      this.check(child);
+      this.check(father);//可能子节点会有更小的值被换上来
+    }
+  }
+  let arr = [8,4,5,3,2,4,1,9];
+  let a = new Heap(arr);
+
+
+</script>
+</body>
+</html>

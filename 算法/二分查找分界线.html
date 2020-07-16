@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>如题</title>
+</head>
+<body>
+<script>
+    //寻找最后一个负数(一定存在分界线)
+    function find_bound_neg(arr,st,ed) {
+      // 当寻址空间为2时,直接检查分界线
+      if(ed-st===1){
+        //左正右0
+        return st;
+      }
+      let i = st + parseInt((ed-st)/2);
+      if(arr[i]<0){
+        return find_bound_neg(arr,i,ed);
+      }
+      else{
+        return find_bound_neg(arr,st,i);
+      }
+    }
+    //寻找最后一个正数(一定存在分界线)
+    function find_bound_pos(arr,st,ed) {
+      // 当寻址空间为2时,直接检查分界线
+      if(ed-st===1){
+        //左0右正
+        return ed;
+      }
+      let i = parseInt(st+(ed-st)/2);
+      if(arr[i]===0){
+        return find_bound_pos(arr,i,ed);
+      }
+      else{
+        return find_bound_pos(arr,st,i);
+      }
+    }
+    //寻找一个0分界线
+    function find_bound_0(arr,st,ed){
+      let i = st + parseInt((ed-st)/2);
+      let l,r;
+      if(arr[i]===0){
+        l = find_bound_neg(arr,st,i);
+        r = find_bound_pos(arr,i,ed);
+      }
+      else if(arr[i]<0){
+        return find_bound_0(arr,i,ed);
+      }
+      else{
+        return find_bound_0(arr,st,i);
+      }
+      return [l,r]
+    }
+    function find_bound(arr){
+      return find_bound_0(arr,0,arr.length-1);
+    }
+    let arr = [-1,-1,-2,-3,-1,-4,-1,0,0,0,0,1,3,2,3];
+    console.log(find_bound(arr));
+</script>
+</body>
+</html>
