@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>如题</title>
+</head>
+<body>
+<script>
+    function RPromise(func) {
+      this.state = "pending";
+      this.handler_list = [];
+      this.init_RPromise = null;
+      this.resovler = this.resovler.bind(this);
+      requestAnimationFrame(()=>func(this.resovler));
+    }
+    RPromise.prototype.resovler = function () {
+      if(this.handler_list.length===0)
+        return;
+      else{
+        let result = this.handler_list.shift()();
+        if(result instanceof RPromise){
+          result.init_RPromise = this;
+          result.handler_list = this.handler_list;
+        }
+        else{
+          this.state = "resolved";
+          if(this.init_RPromise)
+            this.init_RPromise.state = "resolved";
+        }
+      }
+    };
+    RPromise.prototype.then = function (func_resolve) {
+      this.handler_list.push(func_resolve);
+      return this;
+    };
+    let a = new RPromise((resolve)=>resolve())
+      .then(()=>{console.log("vince");return new RPromise((resolve)=>setTimeout(resolve,1000));})
+      .then(()=>{console.log("chen")});
+</script>
+</body>
+</html>
