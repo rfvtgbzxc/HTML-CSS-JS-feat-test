@@ -5,9 +5,11 @@
     <title>如题</title>
 </head>
 <body>
+<div id="app"></div>
 <script>
   //---------------------------------------------
   // EX1 时间转可视字符串
+  // 子串
   // 输入 Number 20200726231150
   // 输出 String "2020年07月26日 23:11:50"
   //---------------------------------------------
@@ -18,18 +20,44 @@
   }
 
   //---------------------------------------------
-  // EX2 实现get函数
-  // 输入 String "students[0].scores[1].scoreName"
+  // EX2 密码强度测试
+  // 模糊匹配
+  // 规则：初始密码等级为0，以下条件每满足一条,强度提高一级：
+  //      1) 有小写字母
+  //      2) 有大写字母
+  //      3) 有数字
+  //      4) 有"_.!@#$%^&*()"中至少任意2个,可以重复
+  //      5) 密码长度大于8
+  //---------------------------------------------
+  let ex2 = function() {
+      let input = "cf.po0ll_HY10";  // 长风破浪会有时
+      let regexps = [/[a-z]/,/[A-Z]/,/\d/,/[_.!@#$%^&*()].*[_.!@#$%^&*()]/];
+      let output = 0;
+      for(let check of regexps){
+          console.log(check,check.test(input))
+          if(check.test(input))
+              output++;
+      }
+      if(input.length>8)
+          output++;
+      console.log(output);
+  }
+
+  //---------------------------------------------
+  // EX3 实现get函数
+  // 子串、模糊匹配
+  // 输入 String "student2s[0].scores[1].scoreName"
+  // "students[0].name"
   // 输出 Array<String> ["students","0","scores","1","scoreName"]
   //---------------------------------------------
-  let ex2 = function () {
+  let ex3 = function () {
     let data = {
       students:[
         {
           name: "Vince",
           scores: [
-            {scoreName: "Math", score: 90},
-            {scoreName: "Physics", score: 89}
+            { scoreName: "Math", score: 90 },
+            { scoreName: "Physics", score: 89 }
           ]
         }
       ]
@@ -58,46 +86,118 @@
     }
     console.log(val);
   }
-  //---------------------------------------------
-  // EX3 密码强度测试
-  // 规则：初始密码等级为0，以下条件每满足一条,强度提高一级：
-  //      1) 有小写字母
-  //      2) 有大写字母
-  //      3) 有数字
-  //      4) 有"_.!@#$%^&*()"中至少任意2个,可以重复
-  //      5) 密码长度大于8
-  //---------------------------------------------
-  let ex3 = function() {
-    let input = "cf.po0ll_HY10";  // 长风破浪会有时
-    let regexps = [/[a-z]/,/[A-Z]/,/\d/,/[_.!@#$%^&*()].*[_.!@#$%^&*()]/];
-    let output = 0;
-    for(let check of regexps){
-      console.log(check,check.test(input))
-      if(check.test(input))
-        output++;
-    }
-    if(input.length>8)
-      output++;
-    console.log(output);
-  }
+
 
   //---------------------------------------------
   // EX4 千分位转换
+  // 匹配位置，模糊匹配
   // 输入 Number 12345678
-  // 输出 String 12，345，678
+  // 输出 String 12,345,678
   //
   // 输入 Number 123456789
-  // 输出 String 123，456，789
+  // 输出 String 123,456,789
   //---------------------------------------------
   let ex4 = function () {
-    let input = 12345678;
-    let output = String(input).match(/(?![12])\d(?<![45])/);
+    let input = 123456789;
+    // 方法一，从末尾逗号开始
+    let output = String(input).replace(/(?=\d{3}$)/,",");
+    while(output.match(/(?<!,|^)(?=\d{3},)/)){
+        output = output.replace(/(?=\d{3},)/,",");
+    }
     console.log(output);
 
-
+    // 方法二，从末尾开始
+    output = String(input).replace(/(?<!^)(?=(\d{3})+$)/g,",");
+    console.log(output);
   }
-
-  ex3();
+  //---------------------------------------------
+  // EX5 模版渲染
+  // 子串，模糊匹配
+  // 要求：实现类似于django的模版渲染，支持一层for循环和数据传入
+  //---------------------------------------------
+  //--------------------------------------------------------
+  // 模版渲染器
+  // 支持一层深度for循环
+  //--------------------------------------------------------
+  DynamicMenu = function(){};
+  DynamicMenu.func_init = function(){
+      this.render = function(template,data){
+          var flat_for_structure = function(template,data){
+              return template.replace(/{%\s*(for.*?)\s*?%}(.*)?{%\s*endfor\s*%}/g,function(match, forhead,forbody) {
+                  var fordata={};
+                  forhead.replace(/for\s*(.*?)\s*in\s*(.*)/,function(match,item,list){
+                      fordata.item_name=item;
+                      fordata.list_name=list;
+                      fordata.list_length=load_value(list,data).length;
+                  });
+                  var result="";
+                  for(let i=0;i<fordata.list_length;i++){
+                      result+=forbody.replace(new RegExp("(?<=\\{\\{.*)("+fordata.item_name+")(?=.*?\\}\\})","g"),function(match) {
+                          return fordata.list_name+"."+i;
+                      });
+                  }
+                  return result;
+              });
+          }
+          var load_value = function(key,data){
+              //检查是否有多级引用
+              var key_list=key.split(/\./);
+              var value=data;
+              try{
+                  for(let base_key of key_list){
+                      value=value[base_key];
+                  }
+              }
+              catch(e){
+                  value="";
+              }
+              return value;
+          }
+          return function(template,data){
+              //先解析for循环
+              var result=flat_for_structure(template,data);
+              return result.replace(/\{\{(.+?)\}\}/g, function(match, key) {
+                  //检查是否有多级引用
+                  return load_value(key,data);
+              });
+          }
+      }();
+  }
+  DynamicMenu.func_init();
+  let ex5 = function() {
+      let app = document.getElementById("app");
+      let data = {
+          info:{
+              class:"No.3",
+              members_all:"60"
+          },
+          students:[
+              {
+                  name: "Vince",
+                  scores: [
+                      { scoreName: "Math", score: 90 },
+                      { scoreName: "Physics", score: 80 }
+                  ]
+              },
+              {
+                  name:"Alex",
+                  scores: [
+                      { scoreName: "Math", score: 85 },
+                      { scoreName: "Chinese", score: 85 }
+                  ]
+              }
+          ]
+      };
+      let template = ("" +
+          "<div>班级:{{info.class}}</div>" +
+          "<div>总人数:{{info.members_all}}</div>" +
+          "<div>成绩列表:</div>" +
+          "{% for student in students %}" +
+          "<div>{{student.name}}<div>" +
+          "{% endfor %}");
+      app.innerHTML = DynamicMenu.render(template,data);
+  }
+  ex5();
 </script>
 </body>
 </html>
