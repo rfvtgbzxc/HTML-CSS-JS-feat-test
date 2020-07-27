@@ -27,7 +27,7 @@
 			console.log(this.age);
 		}
 		function Student(name,age,score){
-			this.vsuper(name,age);
+			Student.prototype.vsuper.call(this,name,age);
 			this.score = score;
 		}
 		function inherit(child,father){
@@ -41,7 +41,7 @@
 		}
 
 		function PrimaryStudent(name,age,score,year){
-			this.vsuper(name,age,score);
+			PrimaryStudent.prototype.vsuper.call(this,name,age,score);
 			this.year = year;
 		}	
 

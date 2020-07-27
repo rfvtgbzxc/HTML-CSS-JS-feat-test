@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>如题</title>
+</head>
+<body>
+<script>
+  function Node(val){
+    this.val = val;
+    this.leftchild = null;
+    this.rightchild = null;
+  }
+
+  function Tree(val){
+    this.root = new Node(val);
+  }
+
+  Tree.prototype.add = function(val){
+    let father = this.root;
+    this.tryadd(father,val);
+  }
+  Tree.prototype.tryadd = function(father,val){
+    if(val<father.val ){
+      if(father.leftchild){
+        this.tryadd(father.leftchild,val);
+      }
+      else{
+        father.leftchild = new Node(val);
+      }
+    }
+    else{
+      if(father.rightchild){
+        this.tryadd(father.rightchild,val);
+      }
+      else{
+        father.rightchild = new Node(val);
+      }
+    }
+  }
+  Tree.prototype.midlog = function(){
+    let node = this.root;
+    this.in_midlog(node);
+  }
+  Tree.prototype.in_midlog = function(node){
+    if(node.leftchild){
+      this.in_midlog(node.leftchild);
+    }
+    console.log(node.val);
+    if(node.rightchild){
+      this.in_midlog(node.rightchild);
+    }
+  }
+  var load_array_to_tree = function(arr){
+    let tree = new Tree(arr.pop());
+    while(arr.length>0){
+      tree.add(arr.pop());
+    }
+    return tree;
+  }
+  let arr = [4,5,6,3,5,3,2,1,8,9];
+
+  let tree = load_array_to_tree(arr);
+  tree.midlog();
+
+</script>
+</body>
+</html>

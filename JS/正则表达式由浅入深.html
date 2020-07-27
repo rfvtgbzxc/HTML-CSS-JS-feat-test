@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>如题</title>
+</head>
+<body>
+<script>
+    //---------------------------------------------
+    // EX1 时间转可视字符串
+    // 输入 Number 20200726231150
+    // 输出 String "2020年07月26日 23:11:50"
+    //---------------------------------------------
+    let ex1 = function () {
+      let input = 20200726231150;
+      let output = String(input).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/,(match,year,month,day,hour,minute,second)=>`${year}年${month}月${day}日 ${hour}:${minute}:${second}`);
+      console.log(output);
+    }
+
+
+    //---------------------------------------------
+    // EX2 实现get函数
+    // 输入 String "scores[1].scoreName"
+    // 输出 Array<String> ["scores","1","scoreName"]
+    //---------------------------------------------
+    let ex2 = function () {
+      let data = {name:"Vince",scores:[{scoreName:"Math",score:90},{scoreName:"Physics",score:89}]};
+      let input = "scores[1].scoreName";
+      //input = ""
+      let output = input.replace(/([a-zA-Z]*)/g,"?");
+      console.log(output);
+    }
+    ex2();
+</script>
+</body>
+</html>
