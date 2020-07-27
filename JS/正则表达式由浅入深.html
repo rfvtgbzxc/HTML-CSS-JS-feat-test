@@ -6,31 +6,98 @@
 </head>
 <body>
 <script>
-    //---------------------------------------------
-    // EX1 时间转可视字符串
-    // 输入 Number 20200726231150
-    // 输出 String "2020年07月26日 23:11:50"
-    //---------------------------------------------
-    let ex1 = function () {
-      let input = 20200726231150;
-      let output = String(input).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/,(match,year,month,day,hour,minute,second)=>`${year}年${month}月${day}日 ${hour}:${minute}:${second}`);
-      console.log(output);
+  //---------------------------------------------
+  // EX1 时间转可视字符串
+  // 输入 Number 20200726231150
+  // 输出 String "2020年07月26日 23:11:50"
+  //---------------------------------------------
+  let ex1 = function () {
+    let input = 20200726231150;
+    let output = String(input).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/,(match,year,month,day,hour,minute,second)=>`${year}年${month}月${day}日 ${hour}:${minute}:${second}`);
+    console.log(output);
+  }
+
+  //---------------------------------------------
+  // EX2 实现get函数
+  // 输入 String "students[0].scores[1].scoreName"
+  // 输出 Array<String> ["students","0","scores","1","scoreName"]
+  //---------------------------------------------
+  let ex2 = function () {
+    let data = {
+      students:[
+        {
+          name: "Vince",
+          scores: [
+            {scoreName: "Math", score: 90},
+            {scoreName: "Physics", score: 89}
+          ]
+        }
+      ]
+    };
+    let input = "students[0].scores[1].scoreName";
+
+    // 方法一，匹配两次，将数组访问统一改写为"."
+    let output1 = input.replace(/\[(.+?)]/g,(match,inner)=>"."+inner);
+    console.log(output1);
+    // 两种处理方式，逻辑略有不同
+    let output2 = output1.split(".");
+    console.log(output2);
+    output2 = output1.match(/[^.]+/g);
+    console.log(output2);
+
+    // 方法二，依照之前的思路，将数组和"."都视为跳过字符
+    let output = input.match(/[^.\[\]]+/g);
+    console.log(output);
+
+    let val = data;
+    for(let key of output){
+      val = val[key];
+      if(val==undefined) {
+        break;
+      }
     }
+    console.log(val);
+  }
+  //---------------------------------------------
+  // EX3 密码强度测试
+  // 规则：初始密码等级为0，以下条件每满足一条,强度提高一级：
+  //      1) 有小写字母
+  //      2) 有大写字母
+  //      3) 有数字
+  //      4) 有"_.!@#$%^&*()"中至少任意2个,可以重复
+  //      5) 密码长度大于8
+  //---------------------------------------------
+  let ex3 = function() {
+    let input = "cf.po0ll_HY10";  // 长风破浪会有时
+    let regexps = [/[a-z]/,/[A-Z]/,/\d/,/[_.!@#$%^&*()].*[_.!@#$%^&*()]/];
+    let output = 0;
+    for(let check of regexps){
+      console.log(check,check.test(input))
+      if(check.test(input))
+        output++;
+    }
+    if(input.length>8)
+      output++;
+    console.log(output);
+  }
+
+  //---------------------------------------------
+  // EX4 千分位转换
+  // 输入 Number 12345678
+  // 输出 String 12，345，678
+  //
+  // 输入 Number 123456789
+  // 输出 String 123，456，789
+  //---------------------------------------------
+  let ex4 = function () {
+    let input = 12345678;
+    let output = String(input).match(/(?![12])\d(?<![45])/);
+    console.log(output);
 
 
-    //---------------------------------------------
-    // EX2 实现get函数
-    // 输入 String "scores[1].scoreName"
-    // 输出 Array<String> ["scores","1","scoreName"]
-    //---------------------------------------------
-    let ex2 = function () {
-      let data = {name:"Vince",scores:[{scoreName:"Math",score:90},{scoreName:"Physics",score:89}]};
-      let input = "scores[1].scoreName";
-      //input = ""
-      let output = input.replace(/([a-zA-Z]*)/g,"?");
-      console.log(output);
-    }
-    ex2();
+  }
+
+  ex3();
 </script>
 </body>
 </html>

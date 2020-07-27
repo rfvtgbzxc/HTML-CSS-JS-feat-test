@@ -12,7 +12,7 @@
         return typeof data[key] === undefined ? '' : data[key];
       });
     };
-    // æ¨¡æ¿æ–¹æ³•
+    // Ä£°å·½·¨
     var Nav = function(data) {
       var _this = this;
       _this.item = '<li><a href="{#hrefUrl#}" title="{#title#}" {#sign#}>{#content#}</a></li>';
@@ -23,7 +23,7 @@
       _this.html += '</ul>';
       return _this.html;
     };
-    // æ‰©å±•æ–¹æ³•
+    // À©Õ¹·½·¨
     var infoNav = function(data) {
       var _this = this;
       _this.info = '<i>{#num#}</i>';
@@ -37,25 +37,25 @@
     objNav.innerHTML = infoNav([
       {
         hrefUrl : 'http://www.baidu.com',
-        title: 'è¿™é‡Œæ˜¯ç™¾åº¦ä¸€ä¸‹',
-        content : 'ç™¾åº¦ä¸€ä¸‹',
+        title: 'ÕâÀïÊÇ°Ù¶ÈÒ»ÏÂ',
+        content : '°Ù¶ÈÒ»ÏÂ',
         num: '10',
         sign: 'sign="1"'
       },
       {
         hrefUrl: 'http://www.zhihu.com',
-        title: 'è¿™é‡Œæ˜¯çŸ¥ä¹ä¸€ä¸‹',
-        content: 'çŸ¥ä¹ä¸€ä¸‹',
+        title: 'ÕâÀïÊÇÖªºõÒ»ÏÂ',
+        content: 'ÖªºõÒ»ÏÂ',
         num: '10',
         sign: 'sign="2"'
       }
     ])*/
-    //match:åŒ¹é…å†…å®¹ key:å­ä¸²å†…å®¹ index:åŒ¹é…ä½ç½® dd:å­—ç¬¦ä¸²åŸæ–‡
+    //match:Æ¥ÅäÄÚÈİ key:×Ó´®ÄÚÈİ index:Æ¥ÅäÎ»ÖÃ dd:×Ö·û´®Ô­ÎÄ
     function render(template,data){
-      //å…ˆè§£æforå¾ªç¯
+      //ÏÈ½âÎöforÑ­»·
       var result=flat_for_structure(template,data);
       return result.replace(/\{\{(.+?)\}\}/g, function(match, key) {
-        //æ£€æŸ¥æ˜¯å¦æœ‰å¤šçº§å¼•ç”¨
+        //¼ì²éÊÇ·ñÓĞ¶à¼¶ÒıÓÃ
         return load_value(key,data);
       });
     }
@@ -77,7 +77,7 @@
       });
     }
     function load_value(key,data){
-      //æ£€æŸ¥æ˜¯å¦æœ‰å¤šçº§å¼•ç”¨
+      //¼ì²éÊÇ·ñÓĞ¶à¼¶ÒıÓÃ
       var key_list=key.split(/\./);
       var value=data;
       try{
@@ -91,7 +91,7 @@
       return value;
     }
     var objNav = document.getElementById('nav');
-    objNav.innerHTML=render(`<div help="{{intro.help}}">{% for name in intro.namelist%}<div>åç§°:{{name}}</div>{% end for%}</div>`,{intro:{help:"è¿™æ˜¯ç®€ä»‹",tip:"è¿™æ˜¯æç¤º",namelist:["æŸ³ç¿","è™šæ™¨å†·","å¤é“"]}});
+    objNav.innerHTML=render(`<div help="{{intro.help}}">{% for name in intro.namelist%}<div>Ãû³Æ:{{name}}</div>{% end for%}</div>`,{intro:{help:"ÕâÊÇ¼ò½é",tip:"ÕâÊÇÌáÊ¾",namelist:["Áøôá","Ğé³¿Àä","¹ÅµÀ"]}});
     //console.log(" for  cost in costlist ".replace(/^\s+|\s+$/g,"").split(/\s+/));
     /*var data={costlist:["x","y","z"]};
     var ax="{% for cost in costlist %}something{{cost}}{% end for %}".replace(/{%\s*(for.*?)\s*?%}(.*){%\s*end for\s*%}/g,function(match, forhead,forbody) {
