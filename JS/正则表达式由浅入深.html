@@ -8,19 +8,7 @@
 <div id="app"></div>
 <script>
   //---------------------------------------------
-  // EX1 时间转可视字符串
-  // 子串
-  // 输入 Number 20200726231150
-  // 输出 String "2020年07月26日 23:11:50"
-  //---------------------------------------------
-  let ex1 = function () {
-    let input = 20200726231150;
-    let output = String(input).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/,(match,year,month,day,hour,minute,second)=>`${year}年${month}月${day}日 ${hour}:${minute}:${second}`);
-    console.log(output);
-  }
-
-  //---------------------------------------------
-  // EX2 密码强度测试
+  // EX1 密码强度测试
   // 模糊匹配
   // 规则：初始密码等级为0，以下条件每满足一条,强度提高一级：
   //      1) 有小写字母
@@ -29,19 +17,33 @@
   //      4) 有"_.!@#$%^&*()"中至少任意2个,可以重复
   //      5) 密码长度大于8
   //---------------------------------------------
-  let ex2 = function() {
-      let input = "cf.po0ll_HY10";  // 长风破浪会有时
-      let regexps = [/[a-z]/,/[A-Z]/,/\d/,/[_.!@#$%^&*()].*[_.!@#$%^&*()]/];
-      let output = 0;
-      for(let check of regexps){
-          console.log(check,check.test(input))
-          if(check.test(input))
-              output++;
-      }
-      if(input.length>8)
-          output++;
-      console.log(output);
+  let ex1 = function() {
+    let input = "cf.po0ll_HY10";  // 长风破浪会有时
+    let regexps = [/[a-z]/,/[A-Z]/,/\d/,/[_.!@#$%^&*()].*[_.!@#$%^&*()]/];
+    let output = 0;
+    for(let check of regexps){
+      console.log(check,check.test(input))
+      if(check.test(input))
+        output++;
+    }
+    if(input.length>8)
+      output++;
+    console.log(output);
   }
+  //ex1();
+
+  //---------------------------------------------
+  // EX2 时间转可视字符串
+  // 子串
+  // 输入 Number 20200726231150
+  // 输出 String "2020年07月26日 23:11:50"
+  //---------------------------------------------
+  let ex2 = function () {
+    let input = 20200726231150;
+    let output = String(input).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/,(match,year,month,day,hour,minute,second)=>`${year}年${month}月${day}日 ${hour}:${minute}:${second}`);
+    console.log(output);
+  }
+  //ex2();
 
   //---------------------------------------------
   // EX3 实现get函数
@@ -86,7 +88,7 @@
     }
     console.log(val);
   }
-
+  //ex3();
 
   //---------------------------------------------
   // EX4 千分位转换
@@ -110,11 +112,35 @@
     output = String(input).replace(/(?<!^)(?=(\d{3})+$)/g,",");
     console.log(output);
   }
+  ex4();
+
   //---------------------------------------------
   // EX5 模版渲染
   // 子串，模糊匹配
   // 要求：实现类似于django的模版渲染，支持一层for循环和数据传入
   //---------------------------------------------
+  //--------------------------------------------------------
+  // HTML转义
+  //--------------------------------------------------------
+  const matchList  = {
+    '<':'&lt;',
+    '>':'&gt;',
+    '&':'&amp;',
+    '"':'&#34;',
+    '"':'&quot;',
+    "'":'&#39;',
+  }
+  // 字符过滤器
+  const HtmlFilter = (text) => {
+    let regStr = '(' + Object.keys(matchList).toString() + ')'
+    // ↑ ------------【*提取匹配列表key值*】.【组数转字符串】
+    regStr = regStr.replace(/,/g, ')|(')
+    // ↑ 通过匹配将其更新为正则的字符串类型
+    const regExp = new RegExp(regStr, 'g')
+    // ↑ ------- 字符串 转 正则 方法
+    return text.replace(regExp, match => matchList[match])
+    // ↑ ------ 替换方法 (正则, 当前key => 返回当前被匹配的key值)
+  }
   //--------------------------------------------------------
   // 模版渲染器
   // 支持一层深度for循环
@@ -136,7 +162,7 @@
                           return fordata.list_name+"."+i;
                       });
                   }
-                  return result;
+                  return String(result);
               });
           }
           var load_value = function(key,data){
@@ -151,7 +177,7 @@
               catch(e){
                   value="";
               }
-              return value;
+            return HtmlFilter(String(value));
           }
           return function(template,data){
               //先解析for循环
@@ -197,7 +223,7 @@
           "{% endfor %}");
       app.innerHTML = DynamicMenu.render(template,data);
   }
-  ex5();
+  //ex5();
 </script>
 </body>
 </html>
